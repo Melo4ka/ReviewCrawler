@@ -1,0 +1,68 @@
+spring:
+  application:
+    name: ReviewCrawler
+  servlet:
+    context-path: /api/v1
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MariaDBDialect
+        format_sql: false
+    open-in-view: false
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema.sql
+      continue-on-error: false
+      platform: mariadb
+
+server:
+  port: 8080
+  tomcat:
+    max-threads: 200
+    min-spare-threads: 10
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+    tagsSorter: alpha
+    use-root-path: true
+  show-actuator: false
+  default-produces-media-type: application/json
+  default-consumes-media-type: application/json
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when_authorized
+
+crawler:
+  userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
+
+logging:
+  level:
+    ru.digitalhoreca.reviewcrawler: INFO
+    ru.digitalhoreca.reviewcrawler.crawler: DEBUG
+    org.springframework: WARN
+    org.hibernate: WARN
+    net.javacrumbs.shedlock: INFO
+    com.zaxxer.hikari: WARN
+    org.openqa.selenium: WARN
